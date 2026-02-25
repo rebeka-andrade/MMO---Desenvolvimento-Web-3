@@ -1,0 +1,1 @@
+Optional<Photo> findByUserId(Long userId);
