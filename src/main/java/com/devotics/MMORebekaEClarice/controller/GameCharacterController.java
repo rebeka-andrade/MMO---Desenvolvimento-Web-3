@@ -28,4 +28,9 @@ public class GameCharacterController {
     public List<GameCharacter> search(@RequestParam String name) {
         return repository.findByNicknameContainingIgnoreCase(name);
     }
+
+    @GetMapping("/{id}")
+    public GameCharacter getCharacter(@PathVariable Long id) {
+        return repository.findById(id).orElseThrow();
+    }
 }

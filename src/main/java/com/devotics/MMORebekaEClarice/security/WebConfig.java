@@ -1,4 +1,4 @@
-package com.devcaotics.mmo.security;
+package com.devotics.MMORebekaEClarice.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

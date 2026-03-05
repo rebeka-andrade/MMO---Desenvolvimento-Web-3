@@ -25,4 +25,9 @@ public class PostController {
     public List<Post> findByCharacter(@PathVariable Long characterId) {
         return repository.findByCharacterId(characterId);
     }
+
+    @GetMapping("/feed/{characterId}")
+    public List<Post> feed(@PathVariable Long characterId) {
+        return repository.feed(characterId);
+    }
 }

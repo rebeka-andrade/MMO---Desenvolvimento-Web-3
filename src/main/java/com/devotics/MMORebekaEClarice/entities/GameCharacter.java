@@ -16,12 +16,10 @@ public class GameCharacter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nickname;
-
     private String classType;
-
     private String imageUrl;
+    private int level;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

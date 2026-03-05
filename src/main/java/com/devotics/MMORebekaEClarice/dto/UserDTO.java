@@ -1,4 +1,4 @@
-package com.devcaotics.mmo.dto;
+package com.devotics.MMORebekaEClarice.dto;
 
 public class UserDTO {
 

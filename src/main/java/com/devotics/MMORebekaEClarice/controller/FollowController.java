@@ -16,4 +16,9 @@ public class FollowController {
     public Follow follow(@RequestBody Follow follow) {
         return repository.save(follow);
     }
+
+    @GetMapping("/followers/{characterId}")
+    public long followers(@PathVariable Long characterId) {
+        return repository.countByFollowingId(characterId);
+    }
 }

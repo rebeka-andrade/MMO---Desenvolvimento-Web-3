@@ -1,6 +1,6 @@
 package com.devotics.MMORebekaEClarice.repositories;
 
-import com.devcaotics.mmo.entities.GameCharacter;
+import com.devotics.MMORebekaEClarice.entities.GameCharacter;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

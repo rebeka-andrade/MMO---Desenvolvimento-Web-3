@@ -1,9 +1,12 @@
 package com.devotics.MMORebekaEClarice.entities;
 
+import org.apache.catalina.User;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(uniqueConstraints = {
+@Table(name = "likes"
+, uniqueConstraints = {
         @UniqueConstraint(columnNames = {"character_id", "post_id"})
 })
 public class Like {
@@ -36,8 +39,8 @@ public class Like {
         return id;
     }
 
-    public void setCharacter(GameCharacter character) {
-        this.character = character;
+    public void setCharacter(User user) {
+        this.character = (GameCharacter) user;
     }
 
     public GameCharacter getCharacter() {

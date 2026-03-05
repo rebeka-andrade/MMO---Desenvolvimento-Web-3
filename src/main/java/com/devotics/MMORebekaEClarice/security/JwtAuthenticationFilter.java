@@ -1,4 +1,4 @@
-package com.devcaotics.mmo.security;
+package com.devotics.MMORebekaEClarice.security;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -24,9 +24,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-                                    throws ServletException, IOException {
+            HttpServletResponse response,
+            FilterChain filterChain)
+            throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
 
@@ -39,12 +39,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String role = (String) claims.get("role");
 
                 var authorities = List.of(
-                        new SimpleGrantedAuthority("ROLE_" + role)
-                );
+                        new SimpleGrantedAuthority("ROLE_" + role));
 
                 var auth = new UsernamePasswordAuthenticationToken(
-                        email, null, authorities
-                );
+                        email, null, authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
@@ -55,5 +53,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.startsWith("/auth/");
     }
 }

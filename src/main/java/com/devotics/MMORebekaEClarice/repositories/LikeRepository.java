@@ -1,6 +1,6 @@
 package com.devotics.MMORebekaEClarice.repositories;
 
-import com.devcaotics.mmo.entities.Like;
+import com.devotics.MMORebekaEClarice.entities.Like;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

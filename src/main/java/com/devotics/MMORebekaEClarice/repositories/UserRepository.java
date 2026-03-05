@@ -1,6 +1,6 @@
 package com.devotics.MMORebekaEClarice.repositories;
 
-import com.devcaotics.mmo.entities.User;
+import com.devotics.MMORebekaEClarice.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

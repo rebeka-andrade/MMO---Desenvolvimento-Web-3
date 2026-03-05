@@ -21,6 +21,6 @@ public class LiveController {
 
     @GetMapping("/active/{characterId}")
     public List<Live> activeLives(@PathVariable Long characterId) {
-        return repository.findByCharacterIdAndActiveTrue();
+        return repository.findByCharacterIdAndActiveTrue(characterId);
     }
 }

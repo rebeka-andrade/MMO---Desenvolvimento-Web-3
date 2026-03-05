@@ -10,6 +10,7 @@ import com.devotics.MMORebekaEClarice.services.AuthService;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin("*")
 public class AuthController {
 
     @Autowired

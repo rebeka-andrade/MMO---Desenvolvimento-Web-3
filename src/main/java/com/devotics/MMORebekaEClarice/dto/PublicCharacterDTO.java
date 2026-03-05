@@ -1,6 +1,6 @@
-package com.devcaotics.mmo.dto;
+package com.devotics.MMORebekaEClarice.dto;
 
-import com.devcaotics.mmo.entities.Character;
+import com.devotics.MMORebekaEClarice.entities.GameCharacter;   
 
 public class PublicCharacterDTO {
 
@@ -8,10 +8,10 @@ public class PublicCharacterDTO {
     private int level;
     private String game;
 
-    public PublicCharacterDTO(Character c) {
-        this.name = c.getName();
+    public PublicCharacterDTO(GameCharacter c) {
+        this.name = c.getNickname();
         this.level = c.getLevel();
-        this.game = c.getGame().getTitle();
+        this.game = c.getGame().getName();
     }
 
     public String getName() {

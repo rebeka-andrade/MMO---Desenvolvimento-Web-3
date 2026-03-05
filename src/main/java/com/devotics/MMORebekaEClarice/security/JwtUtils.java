@@ -1,8 +1,11 @@
-package com.devcaotics.mmo.security;
+package com.devotics.MMORebekaEClarice.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.Authentication;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -33,5 +36,18 @@ public class JwtUtils {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public String getAuthorizedId() {
+
+        Authentication auth = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        if (auth == null) {
+            return null;
+        }
+
+        return auth.getName();
     }
 }
