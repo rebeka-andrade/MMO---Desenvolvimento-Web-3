@@ -1,33 +1,39 @@
 package com.devotics.MMORebekaEClarice.controller;
 
-import com.devotics.MMORebekaEClarice.entities.Post;
-import com.devotics.MMORebekaEClarice.repositories.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.devotics.MMORebekaEClarice.entity.Post;
+import com.devotics.MMORebekaEClarice.entity.Character;
+import com.devotics.MMORebekaEClarice.repository.CharacterRepository;
+import com.devotics.MMORebekaEClarice.service.PostService;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
 public class PostController {
 
-    @Autowired
-    private PostRepository repository;
+    private final PostService postService;
+    private final CharacterRepository characterRepository;
 
-    @PostMapping
-    public Post create(@RequestBody Post post) {
-        post.setCreatedAt(LocalDateTime.now());
-        return repository.save(post);
+    public PostController(PostService postService, CharacterRepository characterRepository) {
+        this.postService = postService;
+        this.characterRepository = characterRepository;
     }
 
-    @GetMapping("/character/{characterId}")
-    public List<Post> findByCharacter(@PathVariable Long characterId) {
-        return repository.findByCharacterId(characterId);
+    @PostMapping("/{characterId}")
+    public Post createPost(@PathVariable Long characterId, @RequestBody Post post) {
+        Character character = characterRepository.findById(characterId).orElseThrow();
+        return postService.createPost(post, character);
     }
 
-    @GetMapping("/feed/{characterId}")
-    public List<Post> feed(@PathVariable Long characterId) {
-        return repository.feed(characterId);
+    @GetMapping("/{characterId}")
+    public List<Post> getPostsByCharacter(@PathVariable Long characterId) {
+        Character character = characterRepository.findById(characterId).orElseThrow();
+        return postService.getPostsByCharacter(character);
+    }
+
+    @GetMapping
+    public List<Post> getAllPosts() {
+        return postService.getAllPosts();
     }
 }

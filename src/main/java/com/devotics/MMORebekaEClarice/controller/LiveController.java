@@ -1,8 +1,9 @@
 package com.devotics.MMORebekaEClarice.controller;
 
-import com.devotics.MMORebekaEClarice.entities.Live;
-import com.devotics.MMORebekaEClarice.repositories.LiveRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.devotics.MMORebekaEClarice.entity.Live;
+import com.devotics.MMORebekaEClarice.entity.Character;
+import com.devotics.MMORebekaEClarice.repository.CharacterRepository;
+import com.devotics.MMORebekaEClarice.service.LiveService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,16 +12,27 @@ import java.util.List;
 @RequestMapping("/lives")
 public class LiveController {
 
-    @Autowired
-    private LiveRepository repository;
+    private final LiveService liveService;
+    private final CharacterRepository characterRepository;
 
-    @PostMapping
-    public Live create(@RequestBody Live live) {
-        return repository.save(live);
+    public LiveController(LiveService liveService, CharacterRepository characterRepository) {
+        this.liveService = liveService;
+        this.characterRepository = characterRepository;
     }
 
-    @GetMapping("/active/{characterId}")
-    public List<Live> activeLives(@PathVariable Long characterId) {
-        return repository.findByCharacterIdAndActiveTrue(characterId);
+    @PostMapping("/start/{characterId}")
+    public Live startLive(@PathVariable Long characterId, @RequestParam String title) {
+        Character character = characterRepository.findById(characterId).orElseThrow();
+        return liveService.startLive(title, character);
+    }
+
+    @PostMapping("/end/{id}")
+    public Live endLive(@PathVariable Long id) {
+        return liveService.endLive(id);
+    }
+
+    @GetMapping("/active")
+    public List<Live> getActiveLives() {
+        return liveService.getActiveLives();
     }
 }

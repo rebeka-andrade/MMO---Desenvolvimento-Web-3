@@ -1,5 +1,52 @@
+/* style.css */
+
+/* Reset básico */
 body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
 
-    background-color: #121212;
+/* Container centralizado */
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 
+/* Botões */
+.btn {
+  width: 150px;
+}
+
+/* Cabeçalhos */
+h1, h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Lista de personagens */
+.character-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.character-card {
+  width: 120px;
+  text-align: center;
+}
+
+.character-card img {
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.character-card img:hover {
+  transform: scale(1.05);
 }

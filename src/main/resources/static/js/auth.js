@@ -1,48 +1,43 @@
-// Defina a constante API logo no topo
-const API = "http://localhost:8080";
+document.getElementById("registerForm")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const user = {
+    username: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value
+  };
 
-async function login() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  const response = await fetch("http://localhost:8080/auth/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(user)
+  });
 
-    const res = await fetch(API + "/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-    });
+  if (response.ok) {
+    alert("Cadastro realizado com sucesso!");
+    window.location.href = "index.html";
+  } else {
+    alert("Erro ao cadastrar usuário.");
+  }
+});
 
-    if (!res.ok) {
-        const error = await res.text();
-        alert(error);
-        return;
+document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  const response = await fetch("http://localhost:8080/characters", {
+    method: "GET",
+    headers: {
+      "Authorization": "Basic " + btoa(username + ":" + password)
     }
+  });
 
-    const data = await res.json();
-    localStorage.setItem("token", data.token);
-    window.location = "feed.html";
-}
-
-async function register() {
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    const res = await fetch(API + "/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            username: name,
-            email,
-            password
-        })
-    });
-
-    if (!res.ok) {
-        const error = await res.text();
-        alert(error);
-        return;
-    }
-
-    alert("Registrado!");
-    window.location = "login.html";
-}
+  if (response.ok) {
+    alert("Login realizado com sucesso!");
+    localStorage.setItem("username", username);
+    localStorage.setItem("password", password);
+    window.location.href = "gamer.html";
+  } else {
+    alert("Credenciais inválidas.");
+  }
+});

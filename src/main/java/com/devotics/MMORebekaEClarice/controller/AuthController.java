@@ -1,30 +1,21 @@
 package com.devotics.MMORebekaEClarice.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import com.devotics.MMORebekaEClarice.entity.User;
+import com.devotics.MMORebekaEClarice.service.UserService;
 import org.springframework.web.bind.annotation.*;
-
-import com.devotics.MMORebekaEClarice.dto.LoginDTO;
-import com.devotics.MMORebekaEClarice.dto.RegisterDTO;
-import com.devotics.MMORebekaEClarice.services.AuthService;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin("*")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final UserService userService;
+
+    public AuthController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterDTO dto) {
-        return authService.register(dto);
+    public User register(@RequestBody User user) {
+        return userService.register(user);
     }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
-        System.out.println("Tentando login com: " + dto.getEmail());
-        return authService.login(dto);
-    }
-
 }
