@@ -23,6 +23,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
+        System.out.println("Tentando login com: " + dto.getEmail());
         return authService.login(dto);
     }
+
 }
