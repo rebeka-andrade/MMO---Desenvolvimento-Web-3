@@ -23,13 +23,13 @@ public class CharacterController {
 
     @PostMapping
     public Character createCharacter(@RequestBody Character character, Authentication authentication) {
-        User user = userRepository.findByUsername(authentication.getName()).orElseThrow();
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
         return characterService.createCharacter(character, user);
     }
 
     @GetMapping
     public List<Character> getCharacters(Authentication authentication) {
-       User user = userRepository.findByUsername(authentication.getName()).orElseThrow();
+       User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
         return characterService.getCharactersByUser(user);
     }
 

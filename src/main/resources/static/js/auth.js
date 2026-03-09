@@ -14,7 +14,7 @@ document.getElementById("registerForm")?.addEventListener("submit", async (e) =>
 
   if (response.ok) {
     alert("Cadastro realizado com sucesso!");
-    window.location.href = "index.html";
+    window.location.href = "http://localhost:8080/login";
   } else {
     alert("Erro ao cadastrar usuário.");
   }
@@ -22,22 +22,23 @@ document.getElementById("registerForm")?.addEventListener("submit", async (e) =>
 
 document.getElementById("loginForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const username = document.getElementById("username").value;
+  const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const response = await fetch("http://localhost:8080/characters", {
-    method: "GET",
-    headers: {
-      "Authorization": "Basic " + btoa(username + ":" + password)
-    }
+  const response = await fetch("http://localhost:8080/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: `username=${email}&password=${password}`
   });
 
   if (response.ok) {
-    alert("Login realizado com sucesso!");
-    localStorage.setItem("username", username);
+
+    localStorage.setItem("email", email);
     localStorage.setItem("password", password);
+
+    alert("Login realizado com sucesso!");
     window.location.href = "gamer.html";
   } else {
-    alert("Credenciais inválidas.");
-  }
+  alert("Credenciais inválidas.");
+}
 });

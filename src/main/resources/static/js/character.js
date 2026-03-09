@@ -7,17 +7,16 @@ async function createCharacter() {
         name: document.getElementById("charName").value,
         role: document.getElementById("charRole").value,
         imageUrl: document.getElementById("charImage").value,
-        game: document.getElementById("charGame").value
+        game: { id: document.getElementById("charGame").value }
     };
 
-    const username = localStorage.getItem("username");
+    const email = localStorage.getItem("email");
     const password = localStorage.getItem("password");
 
     const response = await fetch("http://localhost:8080/characters", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Basic " + btoa(username + ":" + password)
+            "Content-Type": "application/json"
         },
         body: JSON.stringify(character)
     });
@@ -31,13 +30,13 @@ async function createCharacter() {
 }
 
 async function loadCharacters() {
-    const username = localStorage.getItem("username");
+    const email = localStorage.getItem("email");
     const password = localStorage.getItem("password");
 
     const response = await fetch("http://localhost:8080/characters", {
         method: "GET",
         headers: {
-            "Authorization": "Basic " + btoa(username + ":" + password)
+            "Authorization": "Basic " + btoa(email + ":" + password)
         }
     });
 

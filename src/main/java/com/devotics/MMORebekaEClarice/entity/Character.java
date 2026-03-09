@@ -14,9 +14,7 @@ public class Character {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-    private String game;
     private String role;
     private String imageUrl;
     private int level;
@@ -24,6 +22,10 @@ public class Character {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "game_id")
+    private Game game;
 
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL)
     private List<Post> posts;
