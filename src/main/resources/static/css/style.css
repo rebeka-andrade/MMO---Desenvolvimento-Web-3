@@ -50,3 +50,26 @@ h1, h2 {
 .character-card img:hover {
   transform: scale(1.05);
 }
+
+img {
+  transition: 0.2s;
+}
+
+.character-card{
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.character-card:hover{
+  transform:scale(1.05);
+}
+
+.card img{
+  border-radius:10px;
+}
+
+#searchResults{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,120px);
+  gap:15px;
+}

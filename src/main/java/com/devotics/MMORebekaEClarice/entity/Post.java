@@ -2,6 +2,9 @@ package com.devotics.MMORebekaEClarice.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +21,7 @@ public class Post {
     private LocalDateTime createdAt;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "character_id")
     private Character character;
 

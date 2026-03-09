@@ -2,9 +2,12 @@ package com.devotics.MMORebekaEClarice.controller;
 
 import com.devotics.MMORebekaEClarice.entity.Character;
 import com.devotics.MMORebekaEClarice.entity.User;
-import com.devotics.MMORebekaEClarice.service.CharacterService;
 import com.devotics.MMORebekaEClarice.repository.UserRepository;
+import com.devotics.MMORebekaEClarice.service.CharacterService;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +32,7 @@ public class CharacterController {
 
     @GetMapping
     public List<Character> getCharacters(Authentication authentication) {
-       User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
         return characterService.getCharactersByUser(user);
     }
 
@@ -46,5 +49,33 @@ public class CharacterController {
     @DeleteMapping("/{id}")
     public void deleteCharacter(@PathVariable Long id) {
         characterService.deleteCharacter(id);
+    }
+
+    @GetMapping("/search")
+    public List<Character> search(@RequestParam String name) {
+        return characterService.searchCharacters(name);
+    }
+
+    @GetMapping("/{id}/following")
+    public List<Character> getFollowing(@PathVariable Long id) {
+        return characterService.getFollowing(id);
+    }
+
+    @PostMapping("/{followerId}/follow/{targetId}")
+    public ResponseEntity<?> followCharacter(
+            @PathVariable Long followerId,
+            @PathVariable Long targetId) {
+
+        characterService.followCharacter(followerId, targetId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/characters/follow/{targetId}")
+    public ResponseEntity<?> followCharacter(
+        @AuthenticationPrincipal Character loggedCharacter,
+        @PathVariable Long targetId
+    ) {
+        characterService.followCharacter(loggedCharacter.getId(), targetId);
+        return ResponseEntity.ok().build();
     }
 }

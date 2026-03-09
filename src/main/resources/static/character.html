@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <title>Personagem - MMO Rebeka & Clarice</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
+
 <body>
   <div class="container mt-5">
-    <h2 id="characterName">Tela do Personagem</h2>
+    <!-- Informações do personagem -->
+    <div class="d-flex align-items-center mb-3">
+      <img id="characterImage" src="default.png" width="100" class="rounded-circle me-3">
+      <div>
+        <h2 id="characterName">Nome do Personagem</h2>
+        <p id="gameName">Nome do Jogo</p>
+      </div>
+    </div>
 
     <!-- Criar nova postagem -->
+    <h3>Nova Postagem</h3>
     <div class="mb-3">
       <textarea id="postContent" class="form-control" placeholder="Escreva sua postagem..."></textarea>
       <button class="btn btn-success mt-2" onclick="createPost()">Publicar</button>
@@ -18,19 +28,31 @@
 
     <!-- Feed de postagens -->
     <h3>Feed</h3>
-    <div id="postList"></div>
+    <div id="feedList"></div>
 
     <!-- Buscar personagens -->
-    <h3>Buscar personagens</h3>
+    <h3>Buscar Personagens</h3>
     <input type="text" id="searchInput" class="form-control" placeholder="Digite o nome do personagem">
     <button class="btn btn-primary mt-2" onclick="searchCharacters()">Buscar</button>
-    <div id="searchResults"></div>
+    <div id="searchResults" class="mt-2"></div>
 
     <!-- Lives -->
     <h3>Lives dos personagens seguidos</h3>
     <div id="liveList"></div>
+
+    <!-- Iniciar Live -->
+    <h3>Iniciar Live</h3>
+    <input type="text" id="liveTitle" class="form-control" placeholder="Título da live">
+    <button class="btn btn-danger mt-2" onclick="startLive()">Iniciar Live</button>
+
+    <!-- Personagens que sigo -->
+    <h3>Personagens que sigo</h3>
+    <button class="btn btn-info mt-2 mb-2" onclick="showFollowing()">Mostrar</button>
+    <div id="followingList"></div>
   </div>
 
+  <!-- Script JS -->
   <script src="js/characterPage.js"></script>
 </body>
+
 </html>

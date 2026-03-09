@@ -36,4 +36,9 @@ public class PostController {
     public List<Post> getAllPosts() {
         return postService.getAllPosts();
     }
+
+    @GetMapping("/feed/{characterId}")
+    public List<Post> getFeed(@PathVariable Long characterId) {
+        return postService.getFeed(characterId);
+    }
 }

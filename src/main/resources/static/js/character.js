@@ -1,61 +1,75 @@
+// mostrar formulário
 function showCharacterForm() {
-    document.getElementById("characterForm").style.display = "block";
+  const form = document.getElementById("characterForm");
+  form.style.display = form.style.display === "none" ? "block" : "none";
 }
 
 async function createCharacter() {
-    const character = {
-        name: document.getElementById("charName").value,
-        role: document.getElementById("charRole").value,
-        imageUrl: document.getElementById("charImage").value,
-        game: { id: document.getElementById("charGame").value }
-    };
 
-    const email = localStorage.getItem("email");
-    const password = localStorage.getItem("password");
-
-    const response = await fetch("http://localhost:8080/characters", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(character)
-    });
-
-    if (response.ok) {
-        alert("Personagem criado!");
-        loadCharacters();
-    } else {
-        alert("Erro ao criar personagem. Código: " + response.status);
+  const character = {
+    name: document.getElementById("charName").value,
+    role: document.getElementById("charRole").value,
+    imageUrl: document.getElementById("charImage").value,
+    game: {
+      id: document.getElementById("charGame").value
     }
+  };
+
+  const response = await fetch("http://localhost:8080/characters", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(character)
+  });
+
+  if (response.ok) {
+    alert("Personagem criado!");
+    loadCharacters();
+  } else {
+    alert("Erro ao criar personagem");
+  }
 }
 
+// carregar personagens
 async function loadCharacters() {
-    const email = localStorage.getItem("email");
-    const password = localStorage.getItem("password");
 
-    const response = await fetch("http://localhost:8080/characters", {
-        method: "GET",
-        headers: {
-            "Authorization": "Basic " + btoa(email + ":" + password)
-        }
-    });
+  const response = await fetch("http://localhost:8080/characters", {
+    credentials: "include"
+  });
 
+  if (!response.ok) {
+    alert("Erro ao carregar personagens");
+    return;
+  }
 
-    if (!response.ok) {
-        alert("Erro ao carregar personagens. Código: " + response.status);
-        return;
-    }
+  const characters = await response.json();
 
-    const characters = await response.json();
-    const list = document.getElementById("characterList");
-    list.innerHTML = "";
-    characters.forEach(c => {
-        const card = document.createElement("div");
-        card.className = "character-card";
-        card.innerHTML = `
-      <img src="${c.imageUrl}" alt="${c.name}" onclick="openCharacter(${c.id})">
-      <p>${c.name}</p>
+  const list = document.getElementById("characterList");
+  list.innerHTML = "";
+
+  characters.forEach(c => {
+    list.innerHTML += `
+      <div class="card mb-2 p-2 character-card"
+       onclick="openCharacter(${c.id})">
+
+      <img src="${c.imageUrl}" width="80">
+
+      <h5>${c.name}</h5>
+      <p>${c.role}</p>
+      <p>${c.game.name}</p>
+
+  </div>
     `;
-        list.appendChild(card);
-    });
+  });
 }
+
+function openCharacter(characterId) {
+
+  window.location.href = "character.html?id=" + characterId;
+
+}
+
+// carregar quando abrir página
+loadCharacters();

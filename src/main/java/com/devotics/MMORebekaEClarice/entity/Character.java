@@ -1,6 +1,8 @@
 package com.devotics.MMORebekaEClarice.entity;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,5 +31,13 @@ public class Character {
 
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL)
     private List<Post> posts;
+
+    @ManyToMany
+    @JoinTable(
+        name = "character_following",
+        joinColumns = @JoinColumn(name = "character_id"),
+        inverseJoinColumns = @JoinColumn(name = "following_id")
+    )
+    private List<Character> following = new ArrayList<>();
 
 }

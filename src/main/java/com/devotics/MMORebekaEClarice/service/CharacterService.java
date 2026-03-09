@@ -4,7 +4,6 @@ import com.devotics.MMORebekaEClarice.entity.Character;
 import com.devotics.MMORebekaEClarice.entity.User;
 import com.devotics.MMORebekaEClarice.repository.CharacterRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -14,6 +13,11 @@ public class CharacterService {
 
     public CharacterService(CharacterRepository characterRepository) {
         this.characterRepository = characterRepository;
+    }
+
+    public List<Character> getFollowing(Long id) {
+        Character c = characterRepository.findById(id).orElseThrow();
+        return c.getFollowing();
     }
 
     public Character createCharacter(Character character, User user) {
@@ -41,4 +45,21 @@ public class CharacterService {
     public void deleteCharacter(Long id) {
         characterRepository.deleteById(id);
     }
+
+    public List<Character> searchCharacters(String name) {
+        return characterRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public void followCharacter(Long followerId, Long targetCharacterId) {
+        Character follower = characterRepository.findById(followerId)
+                .orElseThrow(() -> new RuntimeException("Follower not found"));
+        Character target = characterRepository.findById(targetCharacterId)
+                .orElseThrow(() -> new RuntimeException("Target not found"));
+
+        if(!follower.getFollowing().contains(target)) {
+            follower.getFollowing().add(target);
+            characterRepository.save(follower);
+        }
+    }
+
 }

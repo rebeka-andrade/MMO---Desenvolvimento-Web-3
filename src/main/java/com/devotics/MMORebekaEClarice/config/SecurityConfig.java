@@ -21,22 +21,42 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> {
-                })
-                .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/auth/**", "/index.html", "/register.html", "/css/**", "/js/**")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated())
+
+        http
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> {})
+
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/auth/**",
+                    "/login",
+                    "/login.html",
+                    "/register.html",
+                    "/css/**",
+                    "/js/**",
+                    "/h2-console/**"
+                ).permitAll()
+                .anyRequest().authenticated()
+            )
+
+            .headers(headers -> headers
+                .frameOptions(frame -> frame.disable())
+            )
 
             .formLogin(form -> form
-                    .defaultSuccessUrl("/gamer.html", true)
-                    .permitAll())
-                .httpBasic(basic -> {
-                })
-                .build();
+                .loginPage("/index.html")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/gamer.html", true)
+                .permitAll()
+            )
+
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login.html")
+            )
+
+            .httpBasic(basic -> {});
+
+        return http.build();
     }
 
     @Bean
