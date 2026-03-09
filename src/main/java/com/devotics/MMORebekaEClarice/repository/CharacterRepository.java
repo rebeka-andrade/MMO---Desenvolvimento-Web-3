@@ -8,4 +8,5 @@ import java.util.List;
 public interface CharacterRepository extends JpaRepository<Character, Long> {
     List<Character> findByUser(User user);
     List<Character> findByNameContainingIgnoreCase(String name);
+    
 }

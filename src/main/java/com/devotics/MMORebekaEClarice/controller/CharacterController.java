@@ -5,13 +5,14 @@ import com.devotics.MMORebekaEClarice.entity.User;
 import com.devotics.MMORebekaEClarice.repository.UserRepository;
 import com.devotics.MMORebekaEClarice.service.CharacterService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/characters")
 public class CharacterController {
@@ -61,21 +62,27 @@ public class CharacterController {
         return characterService.getFollowing(id);
     }
 
-    @PostMapping("/{followerId}/follow/{targetId}")
-    public ResponseEntity<?> followCharacter(
-            @PathVariable Long followerId,
-            @PathVariable Long targetId) {
+    @PostMapping("/follow/{targetId}")
+    public ResponseEntity<?> followCharacter(Authentication authentication, @PathVariable Long targetId) {
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não logado");
+        }
 
-        characterService.followCharacter(followerId, targetId);
-        return ResponseEntity.ok().build();
-    }
+        User loggedUser = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-    @PostMapping("/characters/follow/{targetId}")
-    public ResponseEntity<?> followCharacter(
-        @AuthenticationPrincipal Character loggedCharacter,
-        @PathVariable Long targetId
-    ) {
-        characterService.followCharacter(loggedCharacter.getId(), targetId);
-        return ResponseEntity.ok().build();
+        List<Character> userCharacters = characterService.getCharactersByUser(loggedUser);
+        if (userCharacters.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuário não possui personagem para seguir");
+        }
+
+        Character followerCharacter = userCharacters.get(0);
+
+        try {
+            characterService.followCharacter(followerCharacter.getId(), targetId);
+            return ResponseEntity.ok("Agora você segue esse personagem");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }

@@ -9,4 +9,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByCharacter(Character character);
 
     List<Post> findByCharacterInOrderByCreatedAtDesc(List<Character> characters);
+
+    List<Post> findAllByOrderByCreatedAtDesc();
 }

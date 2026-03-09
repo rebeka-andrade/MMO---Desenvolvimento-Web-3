@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +34,12 @@ public class Character {
     private Game game;
 
     @OneToMany(mappedBy = "character", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Post> posts;
+
+    @ManyToMany
+    @JsonIgnore 
+    private Set<User> followers;
 
     @ManyToMany
     @JoinTable(

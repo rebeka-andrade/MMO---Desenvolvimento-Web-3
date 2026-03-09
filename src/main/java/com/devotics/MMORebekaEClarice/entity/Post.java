@@ -18,7 +18,8 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
-    private LocalDateTime createdAt;
+    private String text;
+    private String imageUrl; 
 
     @ManyToOne
     @JsonIgnore
@@ -29,4 +30,6 @@ public class Post {
     public void prePersist() {
         createdAt = LocalDateTime.now();
     }
+
+     private LocalDateTime createdAt = LocalDateTime.now();
 }

@@ -14,7 +14,6 @@ public class Live {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
     private boolean active;
     private LocalDateTime startedAt;

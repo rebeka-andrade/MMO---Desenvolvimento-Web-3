@@ -56,10 +56,20 @@ public class CharacterService {
         Character target = characterRepository.findById(targetCharacterId)
                 .orElseThrow(() -> new RuntimeException("Target not found"));
 
-        if(!follower.getFollowing().contains(target)) {
+        if (!follower.getFollowing().contains(target)) {
             follower.getFollowing().add(target);
             characterRepository.save(follower);
         }
+    }
+
+    public void follow(Long followerId, Long targetId) {
+        Character follower = characterRepository.findById(followerId)
+                .orElseThrow(() -> new RuntimeException("Seguidor não encontrado"));
+        Character target = characterRepository.findById(targetId)
+                .orElseThrow(() -> new RuntimeException("Personagem alvo não encontrado"));
+
+        follower.getFollowing().add(target);
+        characterRepository.save(follower);
     }
 
 }

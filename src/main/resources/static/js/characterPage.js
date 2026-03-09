@@ -2,12 +2,13 @@
 const params = new URLSearchParams(window.location.search);
 const characterId = params.get("id");
 
-// Carregar dados do personagem
+// Carregar dados do personagem principal
 async function loadCharacter() {
   const response = await fetch(`http://localhost:8080/characters/${characterId}`, { credentials: "include" });
-  const character = await response.json();
+  if (!response.ok) return;
 
-  document.getElementById("characterName").innerText = character.name;
+  const character = await response.json();
+  document.getElementById("characterName").innerText = character.name || "Desconhecido";
   document.getElementById("characterImage").src = character.imageUrl || "default.png";
   document.getElementById("gameName").innerText = character.game?.name || "";
 }
@@ -17,15 +18,16 @@ async function createPost() {
   const content = document.getElementById("postContent").value;
   if (!content.trim()) return alert("Digite algo para postar!");
 
-  const response = await fetch(`http://localhost:8080/posts/${characterId}`, {
+  const response = await fetch(`http://localhost:8080/posts`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content })
+    body: JSON.stringify({ content }),
+    credentials: "include"
   });
 
   if (response.ok) {
     document.getElementById("postContent").value = "";
-    loadFeed(); // atualiza o feed
+    loadFeed();
   } else {
     alert("Erro ao criar postagem.");
   }
@@ -33,8 +35,8 @@ async function createPost() {
 
 // Curtir postagem
 async function likePost(postId) {
-  await fetch(`http://localhost:8080/posts/${postId}/like`, { method: "POST" });
-  loadFeed(); // opcional: atualizar o feed depois de curtir
+  await fetch(`http://localhost:8080/posts/${postId}/like`, { method: "POST", credentials: "include" });
+  loadFeed();
 }
 
 // Comentar postagem
@@ -45,23 +47,26 @@ async function commentPost(postId) {
   await fetch(`http://localhost:8080/comments/${postId}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content: text })
+    body: JSON.stringify({ content: text }),
+    credentials: "include"
   });
+
   document.getElementById("comment-" + postId).value = "";
   loadFeed();
 }
 
 // Carregar feed dos personagens que sigo + próprio personagem
 async function loadFeed() {
-  const response = await fetch(`http://localhost:8080/posts/feed/${characterId}`);
-  const posts = await response.json();
+  const response = await fetch(`http://localhost:8080/posts/feed`, { credentials: "include" });
+  if (!response.ok) return;
 
+  const posts = await response.json();
   const list = document.getElementById("feedList");
   list.innerHTML = "";
 
   posts.forEach(p => {
-    const name = p.character?.name || "Desconhecido";
-    const image = p.character?.imageUrl || "default.png";
+    const name = p.characterName || "Desconhecido";
+    const image = p.characterImageUrl || "default.png";
 
     list.innerHTML += `
       <div class="card p-3 mb-2 d-flex align-items-start">
@@ -80,7 +85,7 @@ async function loadFeed() {
 // Buscar personagens
 async function searchCharacters() {
   const query = document.getElementById("searchInput").value;
-  const response = await fetch(`http://localhost:8080/characters/search?name=${query}`);
+  const response = await fetch(`http://localhost:8080/characters/search?name=${query}`, { credentials: "include" });
   if (!response.ok) { alert("Erro na busca."); return; }
 
   const results = await response.json();
@@ -106,7 +111,7 @@ async function followCharacter(targetId) {
   const response = await fetch(`http://localhost:8080/characters/follow/${targetId}`, { method: "POST", credentials: "include" });
   if (response.ok) {
     alert("Agora você segue esse personagem");
-    loadFeed(); // opcional: atualizar feed após seguir
+    loadFeed();
   } else {
     alert("Erro ao seguir o personagem");
   }
@@ -119,7 +124,7 @@ function viewProfile(id) {
 
 // Carregar lives
 async function loadLives() {
-  const response = await fetch("http://localhost:8080/lives/active");
+  const response = await fetch("http://localhost:8080/lives/active", { credentials: "include" });
   if (!response.ok) return;
 
   const lives = await response.json();
@@ -127,8 +132,8 @@ async function loadLives() {
   list.innerHTML = "";
 
   lives.forEach(live => {
-    const img = live.character?.imageUrl || "default.png";
-    const name = live.character?.name || "Desconhecido";
+    const img = live.characterImageUrl || "default.png";
+    const name = live.characterName || "Desconhecido";
 
     list.innerHTML += `
       <div class="card mb-2 p-2 d-flex align-items-start">
@@ -147,16 +152,17 @@ async function startLive() {
   const title = document.getElementById("liveTitle").value;
   if (!title.trim()) return;
 
-  await fetch(`http://localhost:8080/lives/start/${characterId}?title=${title}`, { method: "POST" });
+  await fetch(`http://localhost:8080/lives/start/${characterId}?title=${title}`, { method: "POST", credentials: "include" });
   alert("Live iniciada!");
   loadLives();
 }
 
 // Mostrar personagens que sigo
 async function showFollowing() {
-  const response = await fetch(`http://localhost:8080/characters/${characterId}/following`);
-  const characters = await response.json();
+  const response = await fetch(`http://localhost:8080/characters/${characterId}/following`, { credentials: "include" });
+  if (!response.ok) return;
 
+  const characters = await response.json();
   const list = document.getElementById("followingList");
   list.innerHTML = "";
 
